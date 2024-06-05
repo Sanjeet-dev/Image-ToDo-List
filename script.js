@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const dropzone = document.getElementById("dropzone");
   const fileInput = document.getElementById("fileInput");
   const fileList = document.getElementById("fileList");
+  const carousel = document.querySelector(".carousel");
   const MAX_IMAGES = 5;
 
   // Load images from local storage
@@ -68,16 +69,16 @@ document.addEventListener("DOMContentLoaded", function () {
       description.placeholder = "Add description here...";
       div.appendChild(description);
 
-      const checkIcon = document.createElement("span");
-      checkIcon.className = "material-icons";
-      checkIcon.innerText = "check";
-      checkIcon.addEventListener("click", () => {
-        if (description.disabled) return;
-        description.disabled = true;
-        alert("Description added");
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.addEventListener("click", () => {
+        description.disabled = !description.disabled;
+        if (description.disabled) {
+          alert("Description added");
+        }
         saveToLocalStorage();
       });
-      div.appendChild(checkIcon);
+      div.appendChild(checkbox);
 
       const deleteIcon = document.createElement("span");
       deleteIcon.className = "material-icons";
@@ -89,9 +90,28 @@ document.addEventListener("DOMContentLoaded", function () {
       div.appendChild(deleteIcon);
 
       fileList.appendChild(div);
+      addImageToCarousel(e.target.result);
       saveToLocalStorage();
     };
     reader.readAsDataURL(file);
+  }
+
+  function addImageToCarousel(src) {
+    const carouselItem = document.createElement("div");
+    carouselItem.className = "carousel-item";
+
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = "Carousel Image";
+    carouselItem.appendChild(img);
+
+    carousel.appendChild(carouselItem);
+
+    // Update carousel transition
+    const items = document.querySelectorAll('.carousel-item');
+    items.forEach((item, index) => {
+      item.style.opacity = (index === 0) ? 1 : 0;
+    });
   }
 
   function saveToLocalStorage() {
@@ -99,10 +119,12 @@ document.addEventListener("DOMContentLoaded", function () {
     fileList.querySelectorAll(".file-item").forEach((div) => {
       const img = div.querySelector("img");
       const description = div.querySelector("textarea");
+      const checkbox = div.querySelector("input[type='checkbox']");
       imagesData.push({
         src: img.src,
         description: description.value,
         disabled: description.disabled,
+        checked: checkbox.checked
       });
     });
     localStorage.setItem("storedImagesData", JSON.stringify(imagesData));
@@ -125,16 +147,17 @@ document.addEventListener("DOMContentLoaded", function () {
       description.disabled = data.disabled;
       div.appendChild(description);
 
-      const checkIcon = document.createElement("span");
-      checkIcon.className = "material-icons";
-      checkIcon.innerText = "check";
-      checkIcon.addEventListener("click", () => {
-        if (description.disabled) return;
-        description.disabled = true;
-        alert("Description added");
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = data.checked;
+      checkbox.addEventListener("click", () => {
+        description.disabled = !description.disabled;
+        if (description.disabled) {
+          alert("Description added");
+        }
         saveToLocalStorage();
       });
-      div.appendChild(checkIcon);
+      div.appendChild(checkbox);
 
       const deleteIcon = document.createElement("span");
       deleteIcon.className = "material-icons";
@@ -146,6 +169,22 @@ document.addEventListener("DOMContentLoaded", function () {
       div.appendChild(deleteIcon);
 
       fileList.appendChild(div);
+      addImageToCarousel(data.src);
+    });
+
+    // Initialize carousel
+    const items = document.querySelectorAll('.carousel-item');
+    items.forEach((item, index) => {
+      item.style.opacity = (index === 0) ? 1 : 0;
     });
   }
+
+  // Carousel functionality
+  let index = 0;
+  setInterval(() => {
+    const items = document.querySelectorAll('.carousel-item');
+    items[index].style.opacity = 0;
+    index = (index + 1) % items.length;
+    items[index].style.opacity = 1;
+  }, 3000);
 });
