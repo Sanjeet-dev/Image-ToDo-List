@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <link rel="stylesheet" href="styles.css">
+    <title>Image To Do List</title>
+</head>
+<body>
+    <div class="carousel">
+        <div class="carousel-items">
+            <div class="carousel-item item-1"></div>
+            <div class="carousel-item item-2"></div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <label for="fileInput" id="dropzone" class="dropzone">
+            <h2 style="color:rgb(255, 75, 30);padding:6px;">Upload Your Images</h2>
+            <div id="img-view">
+                <input type="file" accept="image/*" id="fileInput" class="fileInput" hidden>
+                <p style="font-weight:400; font-size:smaller;">Drag & Drop or <span style="color:red; text-decoration:underline; cursor:pointer;">Click to Browse</span></p>
+            </div>
+        </label>
+
+        <div class="file-list" id="fileList"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
